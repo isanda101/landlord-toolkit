@@ -1,0 +1,14 @@
+# Dependencies & builds
+node_modules/
+.next/
+out/
+dist/
+.vercel/
+# Logs & OS junk
+npm-debug.log*
+yarn-*.log*
+pnpm-debug.log*
+.DS_Store
+# Env files
+.env*
+!.env.local.example
