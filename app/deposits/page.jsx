@@ -315,7 +315,7 @@ export default function DepositsPage() {
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="text-left p-2 border-r border-b">Date</th>
-                    <th className="text-left p-2 border-r border-b">Type</</th>
+                    <th className="text-left p-2 border-r border-b">Type</th>
                     <th className="text-left p-2 border-r border-b">Note</th>
                     <th className="text-right p-2 border-b">Amount</th>
                   </tr>
