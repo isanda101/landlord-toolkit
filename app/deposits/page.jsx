@@ -6,6 +6,17 @@ function fmtMoney(n) {
   if (n == null || isNaN(n)) return "—";
   return `$${Number(n).toFixed(2)}`;
 }
+function fmtDate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return d.toISOString().slice(0, 10);
+}
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+function slug(s = "") {
+  return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
 
 export default function DepositsPage() {
   const [user, setUser] = React.useState(null);
@@ -18,13 +29,14 @@ export default function DepositsPage() {
   const [error, setError] = React.useState("");
 
   const [form, setForm] = React.useState({
-    entry_date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
-    type: "charge", // charge | refund | interest | other
+    entry_date: today(),
+    type: "charge",
     amount: "",
     note: "",
   });
 
-  // Load user + tenants on mount, and refetch on auth change
+  const printableRef = React.useRef(null);
+
   React.useEffect(() => {
     let mounted = true;
     (async () => {
@@ -57,11 +69,10 @@ export default function DepositsPage() {
     setLoading(true);
     const { data, error } = await supabase
       .from("tenants")
-      .select("id, name, unit, created_at")
+      .select("id, name, unit, monthly_rent, deposit, created_at")
       .order("created_at", { ascending: false });
     if (error) setError(error.message);
     setTenants(data || []);
-    // auto-select first tenant if none chosen
     if (!tenantId && data && data.length > 0) {
       setTenantId(data[0].id);
       await fetchEntries(data[0].id);
@@ -100,7 +111,7 @@ export default function DepositsPage() {
     const payload = {
       user_id: user.id,
       tenant_id: tenantId,
-      entry_date: form.entry_date || new Date().toISOString().slice(0,10),
+      entry_date: form.entry_date || today(),
       type: form.type,
       amount: parseMoney(form.amount),
       note: form.note?.trim() || null,
@@ -113,9 +124,9 @@ export default function DepositsPage() {
     }
 
     const { error } = await supabase.from("deposit_entries").insert(payload);
-    if (error) setError(error.message);
-    else {
-      // reset amount/note, keep date + type for convenience
+    if (error) {
+      setError(error.message);
+    } else {
       setForm((f) => ({ ...f, amount: "", note: "" }));
       await fetchEntries();
     }
@@ -129,12 +140,31 @@ export default function DepositsPage() {
     else setEntries((prev) => prev.filter((e) => e.id !== id));
   }
 
-  // Balance: charges & interest add; refunds subtract
   const balance = entries.reduce((acc, e) => {
     const amt = Number(e.amount || 0);
     if (e.type === "refund") return acc - amt;
-    return acc + amt; // charge, interest, other
+    return acc + amt;
   }, 0);
+
+  const tenant = tenants.find((t) => t.id === tenantId);
+
+  async function exportPdf() {
+    if (!printableRef.current) return;
+    const html2pdf = (await import("html2pdf.js")).default;
+
+    const filename = `deposit-statement_${slug(tenant?.name || "tenant")}_${today()}.pdf`;
+
+    const opt = {
+      margin:       0.5,
+      filename,
+      image:        { type: "jpeg", quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+      jsPDF:        { unit: "in", format: "letter", orientation: "portrait" },
+      pagebreak:    { mode: ["css", "legacy"] },
+    };
+
+    await html2pdf().set(opt).from(printableRef.current).save();
+  }
 
   if (loading) {
     return (
@@ -162,29 +192,41 @@ export default function DepositsPage() {
         <a href="/" className="text-sm underline">Back to Home</a>
       </div>
 
-      {/* Tenant picker */}
       <div className="mt-4 p-4 border rounded-xl">
-        <label className="text-sm">Tenant</label>
-        <select
-          className="mt-1 w-full border rounded-lg px-3 py-2"
-          value={tenantId}
-          onChange={async (e) => {
-            const tid = e.target.value;
-            setTenantId(tid);
-            setEntries([]);
-            if (tid) await fetchEntries(tid);
-          }}
-        >
-          <option value="">Select…</option>
-          {tenants.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.name}{t.unit ? ` • ${t.unit}` : ""}
-            </option>
-          ))}
-        </select>
+        <div className="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label className="text-sm">Tenant</label>
+            <select
+              className="mt-1 w-full border rounded-lg px-3 py-2"
+              value={tenantId}
+              onChange={async (e) => {
+                const tid = e.target.value;
+                setTenantId(tid);
+                setEntries([]);
+                if (tid) await fetchEntries(tid);
+              }}
+            >
+              <option value="">Select…</option>
+              {tenants.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}{t.unit ? ` • ${t.unit}` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <button
+              onClick={exportPdf}
+              disabled={!tenantId}
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+              title={tenantId ? "Download PDF" : "Select a tenant first"}
+            >
+              Export PDF
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Balance + Add entry */}
       {tenantId && (
         <>
           <div className="mt-6 p-4 border rounded-xl bg-gray-50">
@@ -246,10 +288,57 @@ export default function DepositsPage() {
         </>
       )}
 
-      {/* History */}
       {tenantId && (
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-3">History</h2>
+        <div ref={printableRef} className="mt-8 p-6 border rounded-xl bg-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-lg font-semibold">Security Deposit Statement</div>
+              <div className="text-sm text-gray-600">Generated: {today()}</div>
+            </div>
+            <div className="text-right text-sm">
+              <div className="font-medium">{tenant?.name || "Tenant"}</div>
+              {tenant?.unit ? <div className="text-gray-600">Unit: {tenant.unit}</div> : null}
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-sm text-gray-600">Current balance</div>
+            <div className="text-xl font-semibold">{fmtMoney(balance)}</div>
+          </div>
+
+          <div className="mt-6">
+            <div className="text-sm font-medium mb-2">History</div>
+            {entries.length === 0 ? (
+              <p className="text-sm text-gray-500">No entries yet.</p>
+            ) : (
+              <table className="w-full text-sm border-t border-l">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="text-left p-2 border-r border-b">Date</th>
+                    <th className="text-left p-2 border-r border-b">Type</</th>
+                    <th className="text-left p-2 border-r border-b">Note</th>
+                    <th className="text-right p-2 border-b">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entries.map((e) => (
+                    <tr key={e.id}>
+                      <td className="p-2 border-r border-b">{fmtDate(e.entry_date)}</td>
+                      <td className="p-2 border-r border-b capitalize">{e.type}</td>
+                      <td className="p-2 border-r border-b">{e.note || "—"}</td>
+                      <td className="p-2 border-b text-right">{fmtMoney(e.amount)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      )}
+
+      {tenantId && (
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-3">Manage entries</h2>
           {entries.length === 0 ? (
             <p className="text-sm text-gray-500">No entries yet.</p>
           ) : (
@@ -258,7 +347,7 @@ export default function DepositsPage() {
                 <div key={e.id} className="flex items-center justify-between p-3 border rounded-xl">
                   <div>
                     <div className="text-sm">
-                      <span className="font-medium">{e.entry_date}</span> • {e.type}
+                      <span className="font-medium">{fmtDate(e.entry_date)}</span> • {e.type}
                       {e.note ? <> • <span className="text-gray-600">{e.note}</span></> : null}
                     </div>
                     <div className="text-sm text-gray-600">{fmtMoney(e.amount)}</div>
