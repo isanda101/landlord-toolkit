@@ -1,0 +1,72 @@
+
+> landlord-toolkit@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/late-rent-notice-template/page.jsx
+Error: 
+  [31mx[0m You are attempting to export "metadata" from a component marked with "use client", which is disallowed. Either remove the export, or the "use client" directive. Read more: https://nextjs.org/
+  [31m|[0m docs/getting-started/react-essentials#the-use-client-directive
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/ibrahimsanda/Downloads/landlord-toolkit-web-starter/app/late-rent-notice-template/page.jsx[0m:2:1]
+ [2m2[0m | import React from "react";
+ [2m3[0m | import { NoticeGenerator } from "@/components/tools";
+ [2m4[0m | 
+ [2m5[0m | export const metadata = {
+   : [31;1m             ^^^^^^^^[0m
+ [2m6[0m |   title: "Late Rent Notice Template (Free)",
+ [2m7[0m |   description: "Generate a professional late-rent notice you can copy or print.",
+ [2m8[0m | };
+   `----
+
+Import trace for requested module:
+./app/late-rent-notice-template/page.jsx
+
+./app/prorated-rent-calculator/page.jsx
+Error: 
+  [31mx[0m You are attempting to export "metadata" from a component marked with "use client", which is disallowed. Either remove the export, or the "use client" directive. Read more: https://nextjs.org/
+  [31m|[0m docs/getting-started/react-essentials#the-use-client-directive
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/ibrahimsanda/Downloads/landlord-toolkit-web-starter/app/prorated-rent-calculator/page.jsx[0m:2:1]
+ [2m2[0m | import React from "react";
+ [2m3[0m | import { ProratedRent } from "@/components/tools";
+ [2m4[0m | 
+ [2m5[0m | export const metadata = {
+   : [31;1m             ^^^^^^^^[0m
+ [2m6[0m |   title: "Prorated Rent Calculator (Free)",
+ [2m7[0m |   description: "Calculate prorated rent by actual days or 30-day method. Fast, accurate, and free.",
+ [2m8[0m | };
+   `----
+
+Import trace for requested module:
+./app/prorated-rent-calculator/page.jsx
+
+./app/security-deposit-tracker/page.jsx
+Error: 
+  [31mx[0m You are attempting to export "metadata" from a component marked with "use client", which is disallowed. Either remove the export, or the "use client" directive. Read more: https://nextjs.org/
+  [31m|[0m docs/getting-started/react-essentials#the-use-client-directive
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/Users/ibrahimsanda/Downloads/landlord-toolkit-web-starter/app/security-deposit-tracker/page.jsx[0m:2:1]
+ [2m2[0m | import React from "react";
+ [2m3[0m | import { DepositTracker } from "@/components/tools";
+ [2m4[0m | 
+ [2m5[0m | export const metadata = {
+   : [31;1m             ^^^^^^^^[0m
+ [2m6[0m |   title: "Security Deposit Tracker (Free)",
+ [2m7[0m |   description: "Track deposit charges, refunds, and interest. Keep a running balance.",
+ [2m8[0m | };
+   `----
+
+Import trace for requested module:
+./app/security-deposit-tracker/page.jsx
+
+
+> Build failed because of webpack errors
