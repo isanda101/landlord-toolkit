@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: landlord-toolkit.vercel.app
+Sitemap: https://landlord-toolkit.vercel.app/sitemap.xml
