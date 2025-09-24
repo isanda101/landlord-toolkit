@@ -2,22 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://landlord-toolkit.vercel.app/</loc>
-    <lastmod>2025-09-23</lastmod>
+    <lastmod>2025-09-24</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://landlord-toolkit.vercel.app/prorated-rent-calculator</loc>
-    <lastmod>2025-09-23</lastmod>
+    <lastmod>2025-09-24</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://landlord-toolkit.vercel.app/security-deposit-tracker</loc>
-    <lastmod>2025-09-23</lastmod>
+    <lastmod>2025-09-24</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://landlord-toolkit.vercel.app/late-rent-notice-template</loc>
-    <lastmod>2025-09-23</lastmod>
+    <lastmod>2025-09-24</lastmod>
     <priority>0.7</priority>
   </url>
 </urlset>
