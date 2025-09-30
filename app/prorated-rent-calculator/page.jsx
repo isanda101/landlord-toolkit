@@ -1,29 +1,30 @@
-import { ProratedRent } from "@/components/tools";
+'use client';
+import Link from "next/link";
 
-export const metadata = {
-  title: "Prorated Rent Calculator (Free)",
-  description: "Calculate prorated rent by actual days or 30-day method. Fast, accurate, and free.",
-};
+export default function ProratedRentCalculatorPage() {
+  const onView = () => {
+    if (typeof window !== 'undefined' && window.va) window.va('event', 'ToolViewed', { tool: 'Prorated Rent Calculator' });
+    if (typeof window !== 'undefined' && window.fbq) window.fbq('trackCustom', 'ToolViewed', { tool: 'Prorated Rent Calculator' });
+  };
+  const onUse = () => {
+    if (typeof window !== 'undefined' && window.va) window.va('event', 'ToolUsed', { tool: 'Prorated Rent Calculator' });
+    if (typeof window !== 'undefined' && window.fbq) window.fbq('trackCustom', 'ToolUsed', { tool: 'Prorated Rent Calculator' });
+    alert("Example: calculation result here.");
+  };
 
-export default function Page() {
   return (
-    <main className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-semibold mb-3">Prorated Rent Calculator</h1>
-      <p className="text-sm text-gray-600 mb-6">
-        Free calculator for landlords and tenants. Choose the method, set dates, and copy results.
-      </p>
-      <ProratedRent />
-      <section className="mt-10 prose prose-sm">
-        <h2>How to calculate prorated rent</h2>
-        <ol>
-          <li>Choose actual days in month or 30-day method.</li>
-          <li>Enter monthly rent and the start/end dates.</li>
-          <li>Copy the computed amount for your invoice/lease addendum.</li>
-        </ol>
-        <h3>FAQ</h3>
-        <p><strong>Is 30-day method okay?</strong> Many leases allow it; check your lease/law.</p>
-        <p className="text-xs text-gray-500">This tool isn’t legal advice.</p>
+    <main className="p-4 max-w-xl mx-auto" onLoad={onView}>
+      <h1 className="text-2xl font-bold">Prorated Rent Calculator</h1>
+      <p className="mt-2 text-sm text-gray-600">Enter monthly rent and dates; we’ll compute the prorated amount.</p>
+
+      <section className="mt-6 space-y-3">
+        <label className="block"><span>Monthly Rent</span><input type="number" className="w-full border p-2 rounded" placeholder="e.g., 1500" /></label>
+        <label className="block"><span>Start Date</span><input type="date" className="w-full border p-2 rounded" /></label>
+        <label className="block"><span>End Date</span><input type="date" className="w-full border p-2 rounded" /></label>
+        <button className="w-full mt-2 border rounded p-2 font-medium" onClick={onUse}>Calculate</button>
       </section>
+
+      <div className="mt-8"><Link href="/" className="underline">← Back to all tools</Link></div>
     </main>
   );
 }
