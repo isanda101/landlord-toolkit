@@ -2,11 +2,6 @@
 
 import Link from "next/link";
 
-export const metadata = {
-  title: "Rent Proration Calculator – Landlord Toolkit",
-  description: "Quickly calculate prorated rent for move-ins and move-outs.",
-};
-
 export default function RentCalculatorPage() {
   const handleStart = () => {
     if (typeof window !== 'undefined' && window.va) {
