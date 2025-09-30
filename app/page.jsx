@@ -45,11 +45,7 @@ export default function Page() {
       {/* Home */}
       {activeTab === "landing" && (
         <main>
-  {/* Tool quick links (auto-injected) */}
   <div className="mt-4 grid gap-3">
-    <Link className="block border rounded p-3" href="/prorated-rent-calculator">Prorated Rent Calculator →</Link>
-    <Link className="block border rounded p-3" href="/security-deposit-calculator">Security Deposit Calculator →</Link>
-    <Link className="block border rounded p-3" href="/notice-generator">Notice Generator →</Link>
   </div>
 
           <Section
