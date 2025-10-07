@@ -182,3 +182,4 @@ export default function Page() {
     </div>
   );
 }
+import { trackEvent } from "@/app/lib/trackEvent";
