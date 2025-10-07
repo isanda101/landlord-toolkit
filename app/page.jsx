@@ -30,7 +30,7 @@ export default function Page() {
             {tabs.map((t) => (
               <button
                 key={t.id}
-                onClick={() => setActiveTab(t.id)}
+                onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
                 className={classNames(
                   "hover:text-black/70",
                   activeTab === t.id && "font-semibold text-black"
@@ -137,7 +137,7 @@ export default function Page() {
               .map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => setActiveTab(t.id)}
+                  onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
                   className={classNames(
                     "px-3 py-1.5 rounded-full border text-sm",
                     activeTab === t.id ? "bg-black text-white border-black" : "border-gray-300 hover:bg-gray-50"
@@ -146,7 +146,7 @@ export default function Page() {
                   {t.label}
                 </button>
               ))}
-            <button onClick={() => setActiveTab("landing")} className="ml-auto text-sm underline">
+            <button onClick={() => { trackEvent("TabClicked", { tab: "landing", label: "Home" }); setActiveTab("landing"); }} className="ml-auto text-sm underline">
               Back to Home
             </button>
           </div>
