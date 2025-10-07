@@ -1,4 +1,5 @@
 "use client";
+import { trackEvent } from "@/app/lib/trackEvent";
 import Link from "next/link";
 import React from "react";
 import "@/app/globals.css";
@@ -86,19 +87,19 @@ export default function Page() {
                   </ul>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <button
-                      onClick={() => setActiveTab("prorate")}
+                      onClick={() => { trackEvent("ToolClicked", { tool: "Prorated Rent Calculator" }); setActiveTab("prorate"); }}
                       className="px-4 py-2 rounded-xl bg-black text-white hover:opacity-90"
                     >
                       Open Prorated Rent
                     </button>
                     <button
-                      onClick={() => setActiveTab("deposit")}
+                      onClick={() => { trackEvent("ToolClicked", { tool: "Security Deposit Calculator" }); setActiveTab("deposit"); }}
                       className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50"
                     >
                       Open Deposit Tracker
                     </button>
                     <button
-                      onClick={() => setActiveTab("notice")}
+                      onClick={() => { trackEvent("ToolClicked", { tool: "Notice Generator" }); setActiveTab("notice"); }}
                       className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50"
                     >
                       Open Notice Generator
@@ -182,4 +183,3 @@ export default function Page() {
     </div>
   );
 }
-import { trackEvent } from "@/app/lib/trackEvent";
