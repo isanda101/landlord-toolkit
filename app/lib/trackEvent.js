@@ -1,8 +1,16 @@
 export const trackEvent = (name, data = {}) => {
   if (typeof window === "undefined") return;
-  console.log("Event tracked:", name, data);
-  // Vercel Analytics
-  if (window.va) window.va("event", name, data);
-  // Facebook Pixel (optional)
-  if (window.fbq) window.fbq("trackCustom", name, data);
+
+  // Facebook Pixel (works now)
+  if (window.fbq) {
+    try { window.fbq("trackCustom", name, data); } catch {}
+  }
+
+  // Optional: GA4 (will work if you add gtag later)
+  if (window.gtag) {
+    try { window.gtag("event", name, data); } catch {}
+  }
+
+  // Console log for free verification
+  try { console.log("Event tracked:", name, data); } catch {}
 };
