@@ -1,5 +1,6 @@
 export const trackEvent = (name, data = {}) => {
   if (typeof window === "undefined") return;
+  console.log("Event tracked:", name, data);
   // Vercel Analytics
   if (window.va) window.va("event", name, data);
   // Facebook Pixel (optional)
