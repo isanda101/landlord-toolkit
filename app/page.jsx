@@ -41,6 +41,29 @@ export default function Page() {
           </nav>
         </div>
       </header>
+  {/* Hero (auto-added) */}
+  <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+    <div className="max-w-3xl mx-auto text-center">
+      <h1 className="text-2xl sm:text-3xl font-bold">
+        Run your rentals smarter — in minutes, not hours.
+      </h1>
+      <p className="mt-3 text-sm sm:text-base text-gray-600">
+        Free landlord calculators for rent, deposits, and notices. No login. No paywall. Just tools that work.
+      </p>
+
+      <div className="mt-6">
+        <Link href="/prorated-rent-calculator" className="inline-block">
+          <button className="px-5 py-3 rounded-xl font-semibold border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.99]">
+            Use the Prorated Rent Calculator
+          </button>
+        </Link>
+      </div>
+
+      <p className="mt-3 text-xs text-gray-500">
+        Trusted by landlords across the U.S. • 100% free • Instant results
+      </p>
+    </div>
+  </section>
 
       {/* Home */}
       {activeTab === "landing" && (
