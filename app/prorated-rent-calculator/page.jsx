@@ -17,6 +17,7 @@ export default function ProratedRentCalculatorPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [result, setResult] = useState(null);
+  const [copied, setCopied] = useState(false); // toast flag
 
   // Prefill from URL on first load
   useEffect(() => {
@@ -49,7 +50,10 @@ export default function ProratedRentCalculatorPage() {
     name: "Prorated Rent Calculator",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
-    url: typeof window !== "undefined" ? window.location.href : "https://landlord-toolkit.vercel.app/prorated-rent-calculator",
+    url:
+      typeof window !== "undefined"
+        ? window.location.href
+        : "https://landlord-toolkit.vercel.app/prorated-rent-calculator",
     description:
       "Calculate prorated rent with inclusive dates. Perfect for landlords and property managers.",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -106,14 +110,24 @@ export default function ProratedRentCalculatorPage() {
     });
   }
 
-  function shareLink() {
+  async function shareLink() {
     const url = buildShareUrl({
       rent: monthlyRent || undefined,
       start: startDate || undefined,
       end: endDate || undefined,
     });
-    navigator.clipboard.writeText(url);
-    trackEvent("ShareLink", { tool: "prorated" });
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      trackEvent("ShareLink", { tool: "prorated", status: "copied" });
+      // auto-hide toast
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // fallback prompt if clipboard API fails
+      window.prompt("Copy this link:", url);
+      trackEvent("ShareLink", { tool: "prorated", status: "prompt-fallback" });
+    }
   }
 
   function printView() {
@@ -137,6 +151,15 @@ export default function ProratedRentCalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      {/* Toast (aria-live for screen readers) */}
+      <div aria-live="polite" className="fixed inset-x-0 top-4 z-[10000] flex justify-center pointer-events-none">
+        {copied && (
+          <div className="pointer-events-auto rounded-full border bg-white/95 px-3 py-1 text-sm shadow">
+            Link copied
+          </div>
+        )}
+      </div>
 
       <h1 className="text-2xl font-bold">Prorated Rent Calculator</h1>
       <p className="mt-2 text-sm opacity-80">
@@ -182,7 +205,7 @@ export default function ProratedRentCalculatorPage() {
             />
           </label>
 
-          <label className="grid gap-1">
+        <label className="grid gap-1">
             <span className="text-sm font-medium">End Date</span>
             <input
               type="date"
