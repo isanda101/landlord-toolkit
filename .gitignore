@@ -12,3 +12,8 @@ pnpm-debug.log*
 # Env files
 .env*
 !.env.local.example
+
+# editor backups
+*.bak.*
+*.backup.*
+*.restore.*
