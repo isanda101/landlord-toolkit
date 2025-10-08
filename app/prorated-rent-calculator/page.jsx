@@ -24,12 +24,14 @@ export default function ProratedRentCalculatorPage() {
     if (!startDate && !endDate) return "";
     const s = startDate ? new Date(startDate) : null;
     const e = endDate ? new Date(endDate) : null;
+
     if (s && !e) {
       const dim = daysInMonthFrom(startDate);
       return dim - s.getDate() + 1;
     }
     if (!s && e) return e.getDate();
     if (!s || !e) return "";
+
     const ms = e - s;
     if (isNaN(ms)) return "";
     return Math.max(1, Math.floor(ms / (1000 * 60 * 60 * 24)) + 1);
@@ -51,11 +53,11 @@ export default function ProratedRentCalculatorPage() {
     const amount = Math.round(daily * occ * 100) / 100;
 
     const lines = [
-      \`Monthly Rent: $\${rent.toFixed(2)}\`,
-      \`Days in Month: \${dim}\`,
-      \`Occupied Days: \${occ}\`,
-      \`Daily Rate: $\${daily.toFixed(2)}\`,
-      \`Prorated Amount: $\${amount.toFixed(2)}\`,
+      `Monthly Rent: $${rent.toFixed(2)}`,
+      `Days in Month: ${dim}`,
+      `Occupied Days: ${occ}`,
+      `Daily Rate: $${daily.toFixed(2)}`,
+      `Prorated Amount: $${amount.toFixed(2)}`
     ];
 
     setResult({ amount, lines });
@@ -64,7 +66,7 @@ export default function ProratedRentCalculatorPage() {
       monthlyRent: rent,
       daysInMonth: dim,
       occupiedDays: occ,
-      amount,
+      amount
     });
   }
 
