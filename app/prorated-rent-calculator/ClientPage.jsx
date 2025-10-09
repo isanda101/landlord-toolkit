@@ -169,9 +169,7 @@ export default function ClientPage() {
         <button onClick={shareLink} className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50">
           Share Link
         </button>
-        <button onClick={printView} className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50">
-          Print
-        </button>
+        <button onClick={printView} className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50"> Print / Save PDF </button>
         <button onClick={resetForm} className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50">
           Reset
         </button>
