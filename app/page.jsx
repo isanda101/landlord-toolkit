@@ -27,50 +27,83 @@ export default function Page() {
           </div>
 
           <nav className="hidden sm:flex items-center gap-6 text-sm">
-            {tabs.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
-                className={classNames(
-                  "hover:text-black/70",
-                  activeTab === t.id && "font-semibold text-black"
-                )}
-              >
-                {t.label}
-              </button>
-            ))}
+            {tabs.map((t) => {
+              // Route Prorated & Deposit to their dedicated pages
+              if (t.id === "prorate") {
+                return (
+                  <Link
+                    key={t.id}
+                    href="/prorated-rent-calculator"
+                    onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
+                    className={classNames("hover:text-black/70")}
+                  >
+                    {t.label}
+                  </Link>
+                );
+              }
+              if (t.id === "deposit") {
+                return (
+                  <Link
+                    key={t.id}
+                    href="/deposit-tracker"
+                    onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
+                    className={classNames("hover:text-black/70")}
+                  >
+                    {t.label}
+                  </Link>
+                );
+              }
+              // Keep Home and Notice as local tabs
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
+                  className={classNames(
+                    "hover:text-black/70",
+                    activeTab === t.id && "font-semibold text-black"
+                  )}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
           </nav>
         </div>
       </header>
-  {/* Hero (auto-added) */}
-  <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-    <div className="max-w-3xl mx-auto text-center">
-      <h1 className="text-2xl sm:text-3xl font-bold">
-        Run your rentals smarter — in minutes, not hours.
-      </h1>
-      <p className="mt-3 text-sm sm:text-base text-gray-600">
-        Free landlord calculators for rent, deposits, and notices. No login. No paywall. Just tools that work.
-      </p>
 
-      <div className="mt-6">
-        <Link href="/prorated-rent-calculator" className="inline-block">
-          <button className="px-5 py-3 rounded-xl font-semibold border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.99]">
-            Use the Prorated Rent Calculator
-          </button>
-        </Link>
-      </div>
+      {/* Hero */}
+      <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold">
+            Run your rentals smarter — in minutes, not hours.
+          </h1>
+          <p className="mt-3 text-sm sm:text-base text-gray-600">
+            Free landlord calculators for rent, deposits, and notices. No login. No paywall. Just tools that work.
+          </p>
 
-      <p className="mt-3 text-xs text-gray-500">
-        Trusted by landlords across the U.S. • 100% free • Instant results
-      </p>
-    </div>
-  </section>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Link href="/prorated-rent-calculator" className="inline-block">
+              <button className="px-5 py-3 rounded-xl font-semibold border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.99]">
+                Use the Prorated Rent Calculator
+              </button>
+            </Link>
+            <Link href="/deposit-tracker" className="inline-block">
+              <button className="px-5 py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 active:scale-[0.99]">
+                Use the Deposit Tracker
+              </button>
+            </Link>
+          </div>
+
+          <p className="mt-3 text-xs text-gray-500">
+            Trusted by landlords across the U.S. • 100% free • Instant results
+          </p>
+        </div>
+      </section>
 
       {/* Home */}
       {activeTab === "landing" && (
         <main>
-  <div className="mt-4 grid gap-3">
-  </div>
+          <div className="mt-4 grid gap-3"></div>
 
           <Section
             id="hero"
@@ -86,18 +119,24 @@ export default function Page() {
                     <li>• Late rent / notice generator</li>
                   </ul>
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <button
-                      onClick={() => { trackEvent("ToolClicked", { tool: "Prorated Rent Calculator" }); setActiveTab("prorate"); }}
-                      className="px-4 py-2 rounded-xl bg-black text-white hover:opacity-90"
+                    <Link
+                      href="/prorated-rent-calculator"
+                      onClick={() => trackEvent("ToolClicked", { tool: "Prorated Rent Calculator" })}
+                      className="inline-block"
                     >
-                      Open Prorated Rent
-                    </button>
-                    <button
-                      onClick={() => { trackEvent("ToolClicked", { tool: "Security Deposit Calculator" }); setActiveTab("deposit"); }}
-                      className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50"
+                      <button className="px-4 py-2 rounded-xl bg-black text-white hover:opacity-90">
+                        Open Prorated Rent
+                      </button>
+                    </Link>
+                    <Link
+                      href="/deposit-tracker"
+                      onClick={() => trackEvent("ToolClicked", { tool: "Security Deposit Tracker" })}
+                      className="inline-block"
                     >
-                      Open Deposit Tracker
-                    </button>
+                      <button className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50">
+                        Open Deposit Tracker
+                      </button>
+                    </Link>
                     <button
                       onClick={() => { trackEvent("ToolClicked", { tool: "Notice Generator" }); setActiveTab("notice"); }}
                       className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50"
@@ -109,6 +148,7 @@ export default function Page() {
 
                 <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 border-l border-gray-100">
                   <div className="text-sm text-gray-600 mb-2">Live preview</div>
+                  {/* Keep using the component preview on Home */}
                   <ProratedRent />
                 </div>
               </div>
@@ -134,37 +174,52 @@ export default function Page() {
           <div className="flex items-center gap-3 mb-6 overflow-x-auto">
             {tabs
               .filter((t) => t.id !== "landing")
-              .map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
-                  className={classNames(
-                    "px-3 py-1.5 rounded-full border text-sm",
-                    activeTab === t.id ? "bg-black text-white border-black" : "border-gray-300 hover:bg-gray-50"
-                  )}
-                >
-                  {t.label}
-                </button>
-              ))}
+              .map((t) => {
+                // Route chips for prorate/deposit
+                if (t.id === "prorate") {
+                  return (
+                    <Link
+                      key={t.id}
+                      href="/prorated-rent-calculator"
+                      onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
+                      className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+                    >
+                      {t.label}
+                    </Link>
+                  );
+                }
+                if (t.id === "deposit") {
+                  return (
+                    <Link
+                      key={t.id}
+                      href="/deposit-tracker"
+                      onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
+                      className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+                    >
+                      {t.label}
+                    </Link>
+                  );
+                }
+                // Keep Notice as an in-page tab
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
+                    className={classNames(
+                      "px-3 py-1.5 rounded-full border text-sm",
+                      activeTab === t.id ? "bg-black text-white border-black" : "border-gray-300 hover:bg-gray-50"
+                    )}
+                  >
+                    {t.label}
+                  </button>
+                );
+              })}
             <button onClick={() => { trackEvent("TabClicked", { tab: "landing", label: "Home" }); setActiveTab("landing"); }} className="ml-auto text-sm underline">
               Back to Home
             </button>
           </div>
 
-          {activeTab === "prorate" && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">Prorated Rent Calculator</h3>
-              <ProratedRent />
-            </div>
-          )}
-
-          {activeTab === "deposit" && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">Security Deposit Tracker</h3>
-              <DepositTracker />
-            </div>
-          )}
-
+          {/* Only Notice remains as embedded tool here */}
           {activeTab === "notice" && (
             <div className="space-y-6">
               <h3 className="text-xl font-semibold">Late Rent Notice Generator</h3>
