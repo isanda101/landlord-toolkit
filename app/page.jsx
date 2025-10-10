@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import "@/app/globals.css";
 import { classNames, Card, Section } from "@/components/ui";
-import { ProratedRent, DepositTracker, NoticeGenerator } from "@/components/tools";
+import { ProratedRent } from "@/components/tools"; // Keep live preview for Prorated on Home
 
 export default function Page() {
   const [activeTab, setActiveTab] = React.useState("landing");
@@ -28,14 +28,14 @@ export default function Page() {
 
           <nav className="hidden sm:flex items-center gap-6 text-sm">
             {tabs.map((t) => {
-              // Route Prorated & Deposit to their dedicated pages
+              // Route Prorated, Deposit, and Notice to dedicated pages
               if (t.id === "prorate") {
                 return (
                   <Link
                     key={t.id}
                     href="/prorated-rent-calculator"
                     onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
-                    className={classNames("hover:text-black/70")}
+                    className="hover:text-black/70"
                   >
                     {t.label}
                   </Link>
@@ -47,13 +47,25 @@ export default function Page() {
                     key={t.id}
                     href="/deposit-tracker"
                     onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
-                    className={classNames("hover:text-black/70")}
+                    className="hover:text-black/70"
                   >
                     {t.label}
                   </Link>
                 );
               }
-              // Keep Home and Notice as local tabs
+              if (t.id === "notice") {
+                return (
+                  <Link
+                    key={t.id}
+                    href="/notice-generator"
+                    onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
+                    className="hover:text-black/70"
+                  >
+                    {t.label}
+                  </Link>
+                );
+              }
+              // Keep Home as a local tab
               return (
                 <button
                   key={t.id}
@@ -92,6 +104,11 @@ export default function Page() {
                 Use the Deposit Tracker
               </button>
             </Link>
+            <Link href="/notice-generator" className="inline-block">
+              <button className="px-5 py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 active:scale-[0.99]">
+                Create a Late Rent Notice
+              </button>
+            </Link>
           </div>
 
           <p className="mt-3 text-xs text-gray-500">
@@ -103,8 +120,6 @@ export default function Page() {
       {/* Home */}
       {activeTab === "landing" && (
         <main>
-          <div className="mt-4 grid gap-3"></div>
-
           <Section
             id="hero"
             title="Run rentals in minutes, not hours"
@@ -133,99 +148,71 @@ export default function Page() {
                       onClick={() => trackEvent("ToolClicked", { tool: "Security Deposit Tracker" })}
                       className="inline-block"
                     >
-                      <button className="px-4 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
+                      <button className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50">
                         Open Deposit Tracker
                       </button>
                     </Link>
-                    <button
-                      onClick={() => { trackEvent("ToolClicked", { tool: "Notice Generator" }); setActiveTab("notice"); }}
-                      className="px-4 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
+                    <Link
+                      href="/notice-generator"
+                      onClick={() => trackEvent("ToolClicked", { tool: "Notice Generator" })}
+                      className="inline-block"
                     >
-                      Open Notice Generator
-                    </button>
+                      <button className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50">
+                        Open Notice Generator
+                      </button>
+                    </Link>
                   </div>
                 </div>
 
                 <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 border-l border-gray-100">
                   <div className="text-sm text-gray-600 mb-2">Live preview</div>
-                  {/* Keep using the component preview on Home */}
+                  {/* Keep a live preview; Prorated is most visual */}
                   <ProratedRent />
                 </div>
               </div>
             </Card>
           </Section>
-
-          <Section id="features" title="Everything you need, free" subtitle="Fast, clean, and accurate.">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {["Prorated rent", "Deposit tracking", "Notice templates"].map((f) => (
-                <Card key={f}>
-                  <div className="text-base font-medium">{f}</div>
-                  <p className="text-sm text-gray-500 mt-1">No accounts. No paywalls.</p>
-                </Card>
-              ))}
-            </div>
-          </Section>
         </main>
       )}
 
-      {/* Tools */}
+      {/* Tools area now only used for Home -> we removed inline Notice/Prorate/Deposit tabs */}
       {activeTab !== "landing" && (
         <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="flex items-center gap-3 mb-6 overflow-x-auto">
-            {tabs
-              .filter((t) => t.id !== "landing")
-              .map((t) => {
-                // Route chips for prorate/deposit
-                if (t.id === "prorate") {
-                  return (
-                    <Link
-                      key={t.id}
-                      href="/prorated-rent-calculator"
-                      onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
-                      className="px-3 py-1.5 rounded-full border text-sm border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
-                    >
-                      {t.label}
-                    </Link>
-                  );
-                }
-                if (t.id === "deposit") {
-                  return (
-                    <Link
-                      key={t.id}
-                      href="/deposit-tracker"
-                      onClick={() => trackEvent("TabClicked", { tab: t.id, label: t.label })}
-                      className="px-3 py-1.5 rounded-full border text-sm border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
-                    >
-                      {t.label}
-                    </Link>
-                  );
-                }
-                // Keep Notice as an in-page tab
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => { trackEvent("TabClicked", { tab: t.id, label: t.label }); setActiveTab(t.id); }}
-                    className={classNames(
-                      "px-3 py-1.5 rounded-full border text-sm",
-                      activeTab === t.id ? "bg-black text-white border-black" : "border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
-                    )}
-                  >
-                    {t.label}
-                  </button>
-                );
-              })}
-            <button onClick={() => { trackEvent("TabClicked", { tab: "landing", label: "Home" }); setActiveTab("landing"); }} className="ml-auto text-sm underline">
+            {/* Route the chips too */}
+            <Link
+              href="/prorated-rent-calculator"
+              onClick={() => trackEvent("TabClicked", { tab: "prorate", label: "Prorated Rent" })}
+              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+            >
+              Prorated Rent
+            </Link>
+            <Link
+              href="/deposit-tracker"
+              onClick={() => trackEvent("TabClicked", { tab: "deposit", label: "Security Deposit Tracker" })}
+              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+            >
+              Security Deposit Tracker
+            </Link>
+            <Link
+              href="/notice-generator"
+              onClick={() => trackEvent("TabClicked", { tab: "notice", label: "Notice Generator" })}
+              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+            >
+              Notice Generator
+            </Link>
+            <button
+              onClick={() => { trackEvent("TabClicked", { tab: "landing", label: "Home" }); setActiveTab("landing"); }}
+              className="ml-auto text-sm underline"
+            >
               Back to Home
             </button>
           </div>
 
-          {/* Only Notice remains as embedded tool here */}
-          {activeTab === "notice" && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold">Late Rent Notice Generator</h3>
-              <NoticeGenerator />
-            </div>
-          )}
+          {/* No inline tool render here anymore */}
+          <div className="text-sm text-gray-500">
+            Select a tool above to open its dedicated page.
+          </div>
         </main>
       )}
 
