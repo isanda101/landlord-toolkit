@@ -105,7 +105,7 @@ export default function Page() {
               </button>
             </Link>
             <Link href="/notice-generator" className="inline-block">
-              <button className="px-5 py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 active:scale-[0.99]">
+              <button className="px-5 py-3 rounded-xl font-semibold border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700 active:scale-[0.99]">
                 Create a Late Rent Notice
               </button>
             </Link>
@@ -148,7 +148,7 @@ export default function Page() {
                       onClick={() => trackEvent("ToolClicked", { tool: "Security Deposit Tracker" })}
                       className="inline-block"
                     >
-                      <button className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50">
+                      <button className="px-4 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
                         Open Deposit Tracker
                       </button>
                     </Link>
@@ -157,7 +157,7 @@ export default function Page() {
                       onClick={() => trackEvent("ToolClicked", { tool: "Notice Generator" })}
                       className="inline-block"
                     >
-                      <button className="px-4 py-2 rounded-xl border border-gray-300 hover:bg-gray-50">
+                      <button className="px-4 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700">
                         Open Notice Generator
                       </button>
                     </Link>
@@ -183,21 +183,21 @@ export default function Page() {
             <Link
               href="/prorated-rent-calculator"
               onClick={() => trackEvent("TabClicked", { tab: "prorate", label: "Prorated Rent" })}
-              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 rounded-full border text-sm border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
             >
               Prorated Rent
             </Link>
             <Link
               href="/deposit-tracker"
               onClick={() => trackEvent("TabClicked", { tab: "deposit", label: "Security Deposit Tracker" })}
-              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 rounded-full border text-sm border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
             >
               Security Deposit Tracker
             </Link>
             <Link
               href="/notice-generator"
               onClick={() => trackEvent("TabClicked", { tab: "notice", label: "Notice Generator" })}
-              className="px-3 py-1.5 rounded-full border text-sm border-gray-300 hover:bg-gray-50"
+              className="px-3 py-1.5 rounded-full border text-sm border-emerald-600 bg-emerald-600 text-white hover:bg-emerald-700"
             >
               Notice Generator
             </Link>
