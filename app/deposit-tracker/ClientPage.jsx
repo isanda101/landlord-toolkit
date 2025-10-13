@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { setRecentTool } from "@/app/lib/recentTool";
 import ResultPanel from "@/components/ui/ResultPanel";
 import { trackEvent } from "@/app/lib/trackEvent";
 import { getParam, setParams, buildShareUrl } from "@/app/lib/urlParams";
@@ -15,6 +16,7 @@ function formatUSD(n) {
 const KEY = "lt_last_deposit";
 
 export default function ClientPage() {
+  React.useEffect(() => { setRecentTool("deposit", "/deposit-tracker"); }, []);
   const [tenant, setTenant] = useState("");
   const [property, setProperty] = useState("");
   const [amount, setAmount] = useState("");
