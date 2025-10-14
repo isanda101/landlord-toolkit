@@ -1,7 +1,9 @@
 import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
-import AdsTag from "@/app/components/AdsTag";
+
+
+import AdsScripts from "@/app/components/AdsScripts";
 
 export const metadata = {
   title: 'Landlord Toolkit – Free Tools for Property Owners',
@@ -35,6 +37,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <AdsScripts />
         {children}
         <Analytics />
       </body>
