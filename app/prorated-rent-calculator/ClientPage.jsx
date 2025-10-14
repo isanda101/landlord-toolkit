@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { sendAdsConversion } from "@/app/lib/ads";
 import ResultPanel from "@/components/ui/ResultPanel";
 import { trackEvent } from "@/app/lib/trackEvent";
 import { getParam, setParams, buildShareUrl } from "@/app/lib/urlParams";
@@ -108,6 +109,7 @@ export default function ClientPage() {
       occupiedDays: occ,
       amount
     });
+    sendAdsConversion('AW-17652097077/PRORATED_LABEL');
   }
 
   async function shareLink() {

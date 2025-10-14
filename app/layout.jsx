@@ -1,6 +1,8 @@
 import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
+import AdsTag from "@/app/components/AdsTag";
+
 export const metadata = {
   title: 'Landlord Toolkit – Free Tools for Property Owners',
   description: 'Simple online tools for independent landlords to manage tenants, leases, and rentals efficiently.',
